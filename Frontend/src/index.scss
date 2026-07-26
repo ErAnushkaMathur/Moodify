@@ -1,0 +1,203 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.expression-container {
+  min-height: 100vh;
+  width: 100%;
+  padding: 40px 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+
+  background: #000;
+
+  h1 {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  // ==========================
+  // CAMERA
+  // ==========================
+
+  .camera-wrapper {
+    padding: 3px;
+    border-radius: 18px;
+
+    background: linear-gradient(
+      135deg,
+      #7c3aed,
+      #a855f7,
+      #ffffff,
+      #8b5cf6
+    );
+
+    box-shadow:
+      0 0 20px rgba(139, 92, 246, 0.3);
+
+    video {
+      display: block;
+
+      width: 600px;
+      max-width: 90vw;
+
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+
+      border-radius: 15px;
+      background: #000;
+    }
+  }
+
+  // ==========================
+  // EXPRESSION RESULT
+  // ==========================
+
+  .expression-result {
+    min-width: 260px;
+
+    padding: 14px 30px;
+
+    border: 1px solid #8b5cf6;
+    border-radius: 12px;
+
+    color: #fff;
+
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+
+    background: rgba(139, 92, 246, 0.08);
+
+    box-shadow:
+      0 0 20px rgba(139, 92, 246, 0.2);
+
+    transition:
+      all 0.3s ease;
+  }
+
+  // ==========================
+  // BUTTON GROUP
+  // ==========================
+
+  .button-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  // ==========================
+  // GRADIENT BORDER BUTTON
+  // ==========================
+
+  .gradient-button {
+    position: relative;
+
+    padding: 12px 28px;
+
+    border: 2px solid transparent;
+    border-radius: 10px;
+
+    background:
+      linear-gradient(#000, #000) padding-box,
+      linear-gradient(
+        135deg,
+        #7c3aed,
+        #a855f7,
+        #ffffff,
+        #8b5cf6
+      ) border-box;
+
+    color: #fff;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease,
+      background 0.3s ease,
+      opacity 0.3s ease;
+
+    // Smooth hover effect
+    &:hover:not(:disabled) {
+      transform: translateY(-3px);
+
+      box-shadow:
+        0 0 10px rgba(139, 92, 246, 0.5),
+        0 0 25px rgba(139, 92, 246, 0.25);
+    }
+
+    // Click effect
+    &:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+
+    // Disabled state
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+}
+
+// ==========================
+// MOBILE
+// ==========================
+
+@media (max-width: 600px) {
+  .expression-container {
+    padding: 25px 15px;
+
+    h1 {
+      font-size: 25px;
+    }
+
+    .camera-wrapper {
+      width: 100%;
+
+      video {
+        width: 100%;
+      }
+    }
+
+    .expression-result {
+      min-width: auto;
+      width: 90%;
+      font-size: 20px;
+    }
+
+    .button-group {
+      width: 100%;
+    }
+
+    .gradient-button {
+      width: 90%;
+    }
+  }
+}
