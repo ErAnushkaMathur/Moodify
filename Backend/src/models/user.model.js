@@ -13,10 +13,11 @@ const userSchema = new mongoose.Schema({
 },
     password: {
         type: String,
-        required: [ true, "Please provide a password"]
-    }
-});
-
+        required: [ true, "Please provide a password"],
+        select: false
+}
+}, {timestamps: true}); 
+    
 const userModel = mongoose.model("Users", userSchema);
 
 module.exports = userModel;
