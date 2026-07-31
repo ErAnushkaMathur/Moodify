@@ -1,37 +1,64 @@
-import {login, register, getMe  , logout} from "../services/auth.api";
+import { login, register, getMe, logout } from "../services/auth.api";
 import { useContext } from "react";
 import { AuthContext } from "../auth.context";
 
-
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    const {user, setUser , loading, setLoading} =  context
+  const context = useContext(AuthContext);
+  const { user, setUser, loading, setLoading } = context;
 
-    async function handleRegister(name, email, username, password) {
-        setLoading(true);
-        const data = await  register(email, username, password);
-        setUser(data.user);
-        setLoading(false);
+  async function handleRegister(name, email, password) {
+    setLoading(true);
+    try {
+      const data = await register(name, email, password);
+      setUser(data.user);
+      return data;
+    } catch (err) {
+      console.error("Register failed:", err);
+      throw err;
+    } finally {
+      setLoading(false);
     }
+  }
 
-    async function handleLogin(email, username, password) {
-        setLoading(true);
-        const data = await login(email, username, password);
-        setUser(data.user);
-        setLoading(false);
+  async function handleLogin(email, password) {
+    setLoading(true);
+    try {
+      const data = await login(email, password);
+      setUser(data.user);
+      return data;
+    } catch (err) {
+      console.error("Login failed:", err);
+      throw err;
+    } finally {
+      setLoading(false);
     }
+  }
 
-    async function handleGetMe() {
-        setLoading(true);
-        const data = await login();
-        setUser(data.user);
-        setLoading(false);
+  async function handleGetMe() {
+    setLoading(true);
+    try {
+      const data = await getMe();
+      setUser(data.user);
+      return data;
+    } catch (err) {
+      console.error("Get user failed:", err);
+      setUser(null);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    async function handleLogout() {
-        setLoading(true);
-        await logout();
-        setUser(null);
-        setLoading(false);
+  async function handleLogout() {
+    setLoading(true);
+    try {
+      await logout();
+      setUser(null);
+    } catch (err) {
+      console.error("Logout failed:", err);
+    } finally {
+      setLoading(false);
     }
-    return { user, loading, handleRegister, handleLogin, handleGetMe, handleLogout }}
+  }
+
+  return { user, loading, handleRegister, handleLogin, handleGetMe, handleLogout };
+};

@@ -1,37 +1,42 @@
 import React, { useState } from "react";
 import "../style/login.scss";
+import MoodPlane from "../components/MoodPlane";
+import "../../shared/styles/button.scss";
 import FormGroup from "../components/FormGroup";
 import { Link, useSearchParams } from "react-router-dom";
-import{useAuth} from "../hooks/useAuth";
-import {useNavigate} from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
-const {loading, handleLogin} = useAuth();
+  const { loading, handleLogin } = useAuth();
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const [email, setEmail] = useState("")
-const[password , setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
-async function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault();
     await handleLogin(email, password);
-   navigate("/");
-}
+    navigate("/");
+  }
 
   return (
     <main className="login-page">
+      <MoodPlane/>
       <div className="form-container">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
-          <FormGroup 
-          value={email} onChange={(e) => setEmail(e.target.value)}
-          label="Email" placeholder="Enter your email" />
-          <FormGroup 
-          value={password} onChange={(e) => setPassword(e.target.value)}
-          label="Password" placeholder="Enter your password" />
-          <button type="submit" disabled={loading}>
+          <FormGroup
+            value={email} onChange={(e) => setEmail(e.target.value)}
+            label="Email" placeholder="Enter your email" />
+          <FormGroup
+            value={password} onChange={(e) => setPassword(e.target.value)}
+            label="Password" placeholder="Enter your password" />
+          <button type="submit"
+           className="button"
+            disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
@@ -40,7 +45,7 @@ async function handleSubmit(e){
         </p>
       </div>
     </main>
-    );
+  );
 }
 
 export default Login;
