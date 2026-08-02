@@ -18,7 +18,7 @@ const Register = () => {
     e.preventDefault();
     try {
       await handleRegister(name, email, password);
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       console.error("Registration failed:", err);
     }
