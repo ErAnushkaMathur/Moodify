@@ -28,7 +28,7 @@ function FaceExpression() {
     useState(false);
 
   const [expression, setExpression] =
-    useState("");
+    useState("😐 Neutral");
 
 
   return (

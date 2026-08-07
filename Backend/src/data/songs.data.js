@@ -1,31 +1,31 @@
 module.exports = {
   happy: {
     cover: "covers/happy.jpg",
-    track:[
-   { title: "Sunny Days", artist: "Artist Name", file: "happy/song1.mp3", }]
-  ,
+    tracks:[
+   { title: "Sunny Days", artist: "Artist Name", file: "happy/song1.mp3" }],
+    },
   sad: {
     cover: "covers/sad.jpg",
-    track:[
+    tracks:[
       { title: "Quiet Rain", artist: "Artist Name", file: "sad/song1.mp3" },
     ]
   },
   angry: {
     cover: "covers/angry.jpg",
-    track:[
+    tracks:[
       { title: "Redline", artist: "Artist Name", file: "angry/song1.mp3" },
     ]
   },
   surprised: {
     cover: "covers/surprised.jpg",
-    track:[
+    tracks:[
       { title: "Spark", artist: "Artist Name", file: "surprised/song1.mp3" },
     ]
   },
   neutral: {
     cover: "covers/neutral.jpg",
-    track:[
+    tracks:[
       { title: "Steady", artist: "Artist Name", file: "neutral/song1.mp3" },
     ]
   },
-}}
+}

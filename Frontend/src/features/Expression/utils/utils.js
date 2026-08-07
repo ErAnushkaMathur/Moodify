@@ -36,7 +36,7 @@ export const startDetection = async ({
     }
 
     // Start detecting
-    setDetecting(true);
+    setDetecting(false);
 
     setExpression(
       "Detecting..."
@@ -166,36 +166,32 @@ export const detectExpression = ({
         shapes,
         "browInnerUp"
       );
+     
+      console.log({
+  mouthOpen,
+  browUp,
+  smile,
+  angry,
+  frown
+});
 
+   let detectedExpression = "😐 Neutral";
 
-    let detectedExpression =
-      "😐 Neutral";
+if (
+  mouthOpen > 0.02 &&
+  browUp > 0.04
+) {
+  detectedExpression = "😮 Surprised";
 
+} else if (smile > 0.06) {
+  detectedExpression = "😊 Happy";
 
-    if (smile > 0.04) {
+} else if (angry > 0.1) {
+  detectedExpression = "😠 Angry";
 
-      detectedExpression =
-        "😊 Happy";
-
-    } else if (angry > 0.09) {
-
-      detectedExpression =
-        "😠 Angry";
-
-    } else if (
-      mouthOpen > 0.4 &&
-      browUp > 0.2
-    ) {
-
-      detectedExpression =
-        "😮 Surprised";
-
-    } else if (frown > 0.0015) {
-
-      detectedExpression =
-        "😢 Sad";
-
-    } 
+} else if (frown > 0.0015) {
+  detectedExpression = "😢 Sad";
+}
 
 
     setExpression(

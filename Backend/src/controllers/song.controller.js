@@ -1,25 +1,63 @@
 const songs = require("../data/songs.data");
+const storageService = require("../services/storage.service");
+const songModel = require("../models/song.model");
+const id3 = require("node-id3");
 
-async function getSongsByMood(req, res) {
-    const mood = req.params.mood.toLowerCase();
-    const moodData = songs[mood];
 
-    if (!moodData || moodData.tracks.length === 0) {
-        return res.status(404).json({ message: "No songs found for this mood" });
-    }
+async function uploadSong(req, res) {
 
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    const songBuffer = req.file.buffer
+    const { mood } = req.body
 
-    const coverUrl = `${baseUrl}/songs/${moodData.cover}`;
+    const tags = id3.read(songBuffer)
 
-    const songList = moodData.tracks.map((track) => ({
-        title: track.title,
-        artist: track.artist,
-        url: `${baseUrl}/songs/${track.file}`,
-        cover: coverUrl,
-    }));
+    const [ songFile, posterFile ] = await Promise.all([
+        storageService.uploadFile({
+            buffer: songBuffer,
+            fileName: tags.title + ".mp3",
+            folder: "/moodify/songs"
+        }),
+        storageService.uploadFile({
+            buffer: tags.image.imageBuffer,
+            fileName: tags.title + ".jpeg",
+            folder: "/moodify/posters"
+        })
+    ])
 
-    res.status(200).json({ mood, songs: songList });
+    const song = await songModel.create({
+        title: tags.title,
+        url: songFile.url,
+        posterUrl: posterFile.url,
+        mood
+    })
+
+    res.status(201).json({
+        message: "song created successfully",
+        song
+    })
+
 }
 
-module.exports = { getSongsByMood };
+async function getSong(req, res) {
+
+    const { mood } = req.query
+
+    const [song] = await songModel.aggregate([
+        {
+            $match: { mood }
+        },
+        {
+            $sample: { size: 1 }
+        }
+    ]);
+
+
+    res.status(200).json({
+        message: "song fetched successfully.",
+        song,
+    })
+
+}
+
+
+module.exports = { uploadSong, getSong }
