@@ -8,61 +8,49 @@ import {
 // START DETECTION
 // ==========================================
 
-export const startDetection = async ({
+export const startCameraOnly = async ({
+  videoRef,
+  streamRef,
+  landmarkerRef,
+  setCameraOn,
+  setExpression,
+}) => {
+  try {
+    if (!streamRef.current) {
+      const { stream, landmarker } = await startCamera(videoRef.current);
+
+      streamRef.current = stream;
+      landmarkerRef.current = landmarker;
+
+      setCameraOn(true);
+      setExpression("😐 Neutral"); // idle state, "Detecting..." nahi
+    }
+  } catch (error) {
+    console.error("Camera / MediaPipe error:", error);
+    setExpression("Unable to access camera");
+  }
+};
+
+export const startDetection = ({
   videoRef,
   streamRef,
   landmarkerRef,
   frameRef,
-  setCameraOn,
   setDetecting,
   setExpression,
 }) => {
-  try {
-    // Start camera + MediaPipe
-    if (!streamRef.current) {
-      const {
-        stream,
-        landmarker,
-      } = await startCamera(
-        videoRef.current
-      );
+  setDetecting(false);
+  setExpression("Detecting...");
 
-      streamRef.current = stream;
-
-      landmarkerRef.current =
-        landmarker;
-
-      setCameraOn(true);
-    }
-
-    // Start detecting
-    setDetecting(false);
-
-    setExpression(
-      "Detecting..."
-    );
-
-    detectExpression({
-      videoRef,
-      streamRef,
-      landmarkerRef,
-      frameRef,
-      setDetecting,
-      setExpression,
-    });
-
-  } catch (error) {
-    console.error(
-      "Camera / MediaPipe error:",
-      error
-    );
-
-    setExpression(
-      "Unable to access camera"
-    );
-  }
+  detectExpression({
+    videoRef,
+    streamRef,
+    landmarkerRef,
+    frameRef,
+    setDetecting,
+    setExpression,
+  });
 };
-
 
 // ==========================================
 // DETECT EXPRESSION
