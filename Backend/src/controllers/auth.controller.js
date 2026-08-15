@@ -4,6 +4,12 @@ const redis = require("../config/cache");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+};
+
 async function registerUser(req, res) {
     const { username, email, password } = req.body;
 
@@ -25,7 +31,7 @@ async function registerUser(req, res) {
         username: user.username,
     }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.cookie("token", token, { httpOnly: true })
+    res.cookie("token", token, cookieOptions);
 
     return res.status(201).json({
         message: "User registered successfully",
@@ -56,7 +62,7 @@ async function loginUser(req, res) {
         email: user.email,
         username: user.username,
     }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("token", token, cookieOptions);
     return res.status(200).json({
         message: "Login successful", user: {
             id: user._id,
@@ -67,18 +73,17 @@ async function loginUser(req, res) {
 }
 
 async function getMe(req, res) {
-    const user = await userModel.findById(req.user.id).select("-password").lean();;
+    const user = await userModel.findById(req.user.id).select("-password").lean();
 
     res.status(200).json({ user });
 }
 
 async function logoutUser(req, res) {
     const token = req.cookies.token;
-    res.clearCookie("token")
+    res.clearCookie("token", cookieOptions);
 
     await redis.set(token, Date.now().toString());
     res.status(200).json({ message: "Logout successful" });
-
-
 }
+
 module.exports = { registerUser, loginUser, getMe, logoutUser }
