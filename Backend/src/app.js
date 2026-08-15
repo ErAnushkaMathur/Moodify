@@ -6,7 +6,7 @@ const path = require("path");
 const app = express();
 
 app.use(cors({                  
-  origin: "https://moodify-mwzp.vercel.app/",
+  origin: "https://moodify-mwzp.vercel.app",
   credentials: true,
 }));
 app.use(express.json());
