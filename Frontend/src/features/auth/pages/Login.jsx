@@ -21,7 +21,17 @@ const Login = () => {
     await handleLogin(email, password);
     navigate("/");
   }
+   
+  const handleDemoLogin = async () => {
+    const demoEmail = "recruiter_demo@gmail.com";
+    const demoPassword = "Demo@123";
 
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+
+    await handleLogin(demoEmail, demoPassword);
+    navigate("/");
+};
   return (
     <main className="login-page">
       <MoodPlane/>
@@ -39,6 +49,11 @@ const Login = () => {
             disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
+           <p>Recruiter? Try the demo account:</p>
+
+          <button type="button" onClick={handleDemoLogin}>
+    Use Demo Account
+</button>
         </form>
         <p>
           Don't have an account? <Link to="/register">Register</Link>
